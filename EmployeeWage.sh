@@ -1,4 +1,4 @@
-#! /bin/bash -x
+#! /bin/bash
 echo "WELCOME TO EMPLOYEE WAGE COMPUTATION"
 
 isPresent=$1
@@ -12,7 +12,6 @@ isFullTime=1
 isPartTime=2
 totalEmpHrs=0
 totalWorkingDays=0
-
 
 function getWorkingDays
 {
@@ -29,15 +28,16 @@ function getWorkingDays
         esac
         echo $empHr
 }
-while [[ $totalEmpHrs -lt $MAX_HRS && $totalWorkingDays -lt $MAX_WORKING_DAYS  ]]
+
+declare -A dailyWageArray
+while [[ $totalEmpHrs -lt $MAX_HRS && $totalWorkingDays -le $MAX_WORKING_DAYS  ]]
 do
         ((totalWorkingDays++))
-        randomCheck=$((RANDOM%3))
+        randomCheck=$((RANDOM%2+1))
         empHr="$( getWorkingDays $randomCheck )"
         dailyWage=$(($empHr * $empWagePerHr))
         dailyWageArray[$totalWorkingDays]=$dailyWage
         totalEmpHrs=$(($totalEmpHrs + $empHr))
+        totalsalary=$(($totalEmpHrs * $empWagePerHr))
+        echo -e "$totalWorkingDays   $dailyWage     $totalsalary"
 done
-totalsalary=$(($totalEmpHrs * $empWagePerHr))
-echo "dailyWage array elements:" ${dailyWageArray[@]}
-echo "dailyWage index positions for array:" ${!dailyWageArray[@]}
