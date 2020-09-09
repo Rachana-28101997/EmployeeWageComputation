@@ -1,7 +1,7 @@
-#! /bin/bash
+#! /bin/bash -x
 echo "WELCOME TO EMPLOYEE WAGE COMPUTATION"
 
-
+isPresent=$1
 empWagePerHr=20
 numbWorkingDays=20
 totalsalary=0
@@ -13,23 +13,31 @@ isPartTime=2
 totalEmpHrs=0
 totalWorkingDays=0
 
-while [[ $totalEmpHrs -lt $MAX_HRS && $totalWorkingDays -lt $MAX_WORKING_DAYS  ]]
-do
-((totalWorkingDays++))
-randCheck=$((RANDOM%3))
-case $randCheck in
-        $isFullTime)
+
+function getWorkingDays
+{
+        case $1 in
+                $isFullTime)
                 empHr=8
         ;;
-        $isPartTime)
+                $isPartTime)
                 empHr=4
         ;;
-        *)
+                *)
                 empHr=0
         ;;
-esac
-totalEmpHrs=$(($totalEmpHrs + $empHr))
+        esac
+        echo $empHr
+}
+while [[ $totalEmpHrs -lt $MAX_HRS && $totalWorkingDays -lt $MAX_WORKING_DAYS  ]]
+do
+        ((totalWorkingDays++))
+        randomCheck=$((RANDOM%3))
+        empHr="$( getWorkingDays $randomCheck )"
+        totalEmpHrs=$(($totalEmpHrs + $empHr))
 done
 totalsalary=$(($totalEmpHrs * $empWagePerHr))
 echo "total Employee hours" $totalEmpHrs
 echo "total salary" $totalsalary
+
+
